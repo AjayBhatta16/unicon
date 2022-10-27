@@ -986,7 +986,6 @@ struct addrinfo *uni_getaddrinfo(char* addr, char* p, int is_udp, int family){
 /* static void on_alarm(int x) 
 {
 }
-*/
 
 int sock_connect(char *fn, int is_udp, int timeout, int af_fam)
 {
@@ -1000,6 +999,191 @@ int sock_connect(char *fn, int is_udp, int timeout, int af_fam)
    int pathbuf_len = sizeof(saddr_un.sun_path);
 #endif					/* UNIX */
 
+   errno = 0;
+   SAFE_strncpy(fname, fn, sizeof(fname));
+
+   /*
+    * find the last colon and get the port.
+    */
+   if (((p = strrchr(fname, ':')) != 0) ) {
+      *p = 0;
+      res0 = uni_getaddrinfo(fname, p+1, is_udp, af_fam);
+      /* Restore the argument just in case */
+      *p = ':';
+
+      if (!res0)
+	return 0;
+
+      s = -1;
+      for (res = res0; res; res = res->ai_next) {
+	s = socket(res->ai_family, res->ai_socktype,
+		   res->ai_protocol);
+	if (s < 0) {
+	  continue;
+	}
+
+	/*
+	if (connect(s, res->ai_addr, res->ai_addrlen) < 0) {
+	  close(s);
+	  s = -1;
+	  continue;
+	}
+	*/
+
+	break;  /* okay we got one */
+      }
+
+      if (s < 0) {
+	// failed to create a socket to any of the resloved names
+	freeaddrinfo(res0);
+	return 0;
+      }
+
+      // This is the node we care about, free all other nodes before and after it
+      saddrinfo = res;
+      sa = saddrinfo->ai_addr;
+      len = saddrinfo->ai_addrlen;
+      if (saddrinfo == res0){
+	if (saddrinfo->ai_next != NULL){
+	  freeaddrinfo(saddrinfo->ai_next);
+	  saddrinfo->ai_next = NULL;
+	  }
+      }
+      else {
+	for (res = res0; res->ai_next != saddrinfo; res = res->ai_next);
+	res->ai_next = NULL;
+	freeaddrinfo(res0);
+
+	res = saddrinfo->ai_next;
+	if (res){
+	  saddrinfo->ai_next = NULL;
+	  freeaddrinfo(res);
+	}
+      }
+   }
+   else {
+      /* UNIX domain socket */
+#if NT
+      return 0;
+#endif
+#if UNIX
+      if (is_udp || (s = socket(PF_UNIX, SOCK_STREAM, 0)) < 0)
+	 return 0;
+      saddr_un.sun_family = AF_UNIX;
+      strncpy(saddr_un.sun_path, fname, pathbuf_len);
+      /* NUL-terminate just in case.... */
+      saddr_un.sun_path[pathbuf_len - 1] = 0;
+      len = sizeof(saddr_un.sun_family) + strlen(saddr_un.sun_path);
+#ifdef SIN6_LEN  /* BSD_4_4_LITE */
+      len += sizeof(saddr_un.sun_len);
+      saddr_un.sun_len = len;
+#endif
+      sa = (struct sockaddr*) &saddr_un;
+#endif					/* UNIX */
+   }
+
+   /* We don't connect UDP sockets but always use sendto(2). */
+   if (is_udp) {
+      /* save the sockaddr struct */
+      saddrs = realloc(saddrs, (s+1) * (sizeof(struct addrinfo *)));
+      if (saddrs == NULL) {
+	 close(s);
+	 return 0;
+	 }
+      saddrs[s] = saddrinfo;
+      return s;
+      }
+
+   if (timeout > 0) {
+#if UNIX
+      /* Save existing flags for restore later */
+      saveflags = fcntl(s, F_GETFL, 0);
+      if (saveflags < 0) {
+         close(s);
+         return 0;
+      }
+      /* Turn on non-blocking flag - this will make connect
+         return immediately.  */
+      if (fcntl(s, F_SETFL, saveflags|O_NONBLOCK) < 0) {
+         close(s);
+         return 0;
+      }
+#endif					/* UNIX */
+#if NT
+      /* Turn on non-blocking flag so connect will return immediately. */
+      unsigned long imode = 1;
+      if (ioctlsocket(s, FIONBIO, &imode) < 0) {
+         errno = WSAGetLastError();
+         closesocket(s);
+         return 0;
+      }
+#endif					/* NT */
+   }
+
+   rc = connect(s, sa, len);
+
+   if (timeout > 0) {
+#if UNIX
+      /* Reset the old flags, but avoiding overwriting the value of errno */
+      int connect_err = errno;
+      if (fcntl(s, F_SETFL, saveflags) < 0) {
+         close(s);
+         return 0;
+      }
+      errno = connect_err;
+
+      if (rc < 0 && errno == EINPROGRESS) {
+         /* The connect is in progress, so select() must be used to wait. */
+         fd_set ws, es;
+         struct timeval tv;
+         int sc, cc;
+	 unsigned int cclen;
+
+         tv.tv_sec = timeout / 1000;
+         tv.tv_usec = 1000 * (timeout % 1000);
+         FD_ZERO(&ws);
+         FD_SET(s, &ws);
+         FD_ZERO(&es);
+         FD_SET(s, &es);
+         errno = 0;
+         sc = select(FD_SETSIZE, NULL, &ws, &es, &tv);      
+         /*
+	  * A result of 0 means timeout; in this case errno will be zero too,
+          * and that can be used to distinguish from another error condition.
+	  */
+         if (sc <= 0) {
+            close(s);
+            return 0;
+            }
+
+         /* Get the error code of the connect */
+         cclen = sizeof(cc);
+         if (getsockopt(s, SOL_SOCKET, SO_ERROR, &cc, &cclen) < 0) {
+            close(s);
+            return 0;
+         }         
+
+         if (cc != 0) {
+            /* There was an error, so set errno and fail */
+            errno = cc;
+            close(s);
+            return 0;
+         }         
+
+         return s;
+      }
+int sock_connect(char *fn, int is_udp, int timeout, int af_fam, char *file1, char *file2)
+{
+  int saveflags, rc, s, len;
+   struct sockaddr *sa;
+   char *p, fname[BUFSIZ];
+   struct addrinfo *res, *res0, *saddrinfo;
+
+#if UNIX
+   struct sockaddr_un saddr_un;
+   int pathbuf_len = sizeof(saddr_un.sun_path);
+#endif					/* UNIX */
+   printf("%s\n", file1)
    errno = 0;
    SAFE_strncpy(fname, fn, sizeof(fname));
 

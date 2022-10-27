@@ -9,6 +9,7 @@
  *  system-dependent files and declarations.
  */
 
+
 #if PORT
    /* nothing to do */
 Deliberate Syntax Error
@@ -384,6 +385,10 @@ Deliberate Syntax Error
 
       for (i = 0; i < slen; i++) {
 	 switch (*s++) {
+	    case 'j':
+	    case 'J':
+		status |= Fs_Encrypt;
+		continue;
 	    case 'a':
 	    case 'A':
 	       status |= Fs_Write|Fs_Append;
@@ -576,7 +581,14 @@ Deliberate Syntax Error
 	    default:
 	       runerr(209, spec);
 	    }
-	 }
+	}
+		
+
+
+
+
+
+
 
       /*
        * Construct a mode field for fopen/popen.
@@ -586,6 +598,104 @@ Deliberate Syntax Error
       mode[2] = '\0';
       mode[3] = '\0';
 
+/*
+ * FLAGPOINT
+ */ 
+
+SSL *ssl;
+/**/
+		if(status & Fs_Encrypt)
+		{
+		
+		tended char* CertFile;
+		tended char* KeyFile;
+		if(cnv:C_string(attr[0], CertFile))
+		
+		if(cnv:C_string(attr[1], KeyFile))
+
+
+		
+		SSL_library_init();
+		SSL_CTX *ctx;
+		
+	
+		
+		SSL_METHOD *method;
+    		
+		
+    		OpenSSL_add_all_algorithms();  
+    		SSL_load_error_strings(); 
+		 /* break point*/ 
+		
+        	method = TLSv1_2_server_method();
+    		ctx = SSL_CTX_new(method); 
+		  
+		
+    		if(ctx == NULL)
+    		{
+        	ERR_print_errors_fp(stderr);
+        	abort();
+    		}
+
+        	SSL_CTX_set_cipher_list(ctx, "ALL:eNULL");
+
+      
+
+
+		
+		
+			
+		if (SSL_CTX_load_verify_locations(ctx, CertFile, KeyFile) != 1)
+        		ERR_print_errors_fp(stderr);
+		else
+			
+    		if (SSL_CTX_set_default_verify_paths(ctx) != 1)
+        		ERR_print_errors_fp(stderr);
+
+    		/* break point */
+    		if (SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0)
+    		{
+        		ERR_print_errors_fp(stderr);
+        		abort();
+    		}
+    		
+        		SSL_CTX_set_default_passwd_cb_userdata(ctx, "12345678");
+    		if (SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0)
+    		{
+        		ERR_print_errors_fp(stderr);
+        		abort();
+    		}
+    
+    if (!SSL_CTX_check_private_key(ctx))
+    {
+        fprintf(stderr, "Private key does not match the public certificate\n");
+        abort();
+    }
+		
+
+		ssl = SSL_new(ctx);              /* get new SSL state with context */
+                	
+		 
+    
+		/*
+		   	
+		
+		if ( cert != NULL )
+       	 	{
+                	
+                	line = X509_NAME_oneline(X509_get_subject_name(cert), 0, 0);
+                	
+                	free(line);
+                	line = X509_NAME_oneline(X509_get_issuer_name(cert), 0, 0);
+                	
+                	free(line);
+                	X509_free(cert);
+        	}
+        	
+                */
+	}
+
+			
 #ifdef Dbm
       /* If we're opening a dbm database, the default is set further down to
          "rw" */
@@ -942,6 +1052,9 @@ Deliberate Syntax Error
 
 #ifdef PosixFns
       {
+	int sd;
+	char buf[1024];
+	int bytes;
 	 if (status & Fs_Socket) {
 	    if (is_ipv4 && is_ipv6)
 	       af_fam = AF_UNSPEC;
@@ -953,12 +1066,42 @@ Deliberate Syntax Error
 	       af_fam = AF_UNSPEC;
 
 	    /* The only allowed values for flags are "n" and "na" */
-	    if (status & ~(Fs_Read|Fs_Write|Fs_Socket|Fs_Append|Fs_Unbuf|Fs_Listen))
+	    if (status & ~(Fs_Read|Fs_Write|Fs_Socket|Fs_Append|Fs_Unbuf|Fs_Listen|Fs_Encrypt))
 	       runerr(209, spec);
 	    if (status & Fs_Append) {
 	       /* "na" => listen for connections */
       	       DEC_NARTHREADS;
 	       fd = sock_listen(fnamestr, is_udp_or_listener, af_fam);
+		SSL_set_fd(ssl, fd);
+	 	/* Service the connection*/
+	
+		/* Add checking for status & Fs_Encrypt*/
+		if ( SSL_accept(ssl) == -1 ){     /* do SSL-protocol accept */
+        	        ERR_print_errors_fp(stderr);
+			
+		}
+       		 else
+       		 {
+			
+			
+			
+			bytes = SSL_read(ssl, buf, sizeof(buf));
+			if (bytes > 0)
+			{
+			buf[bytes] = 0;
+			
+			SSL_write(ssl, "HTTP/1.1 200 OK", strlen(buf));
+			}
+			else
+			{
+			
+			}
+		}
+		sd = SSL_get_fd(ssl);	
+		SSL_free(ssl); 	
+		close(sd);
+		printf("%d\n", fd);
+		printf("%s\n", buf);
       	       INC_NARTHREADS_CONTROLLED;
 	       }
 	    else {
@@ -971,7 +1114,29 @@ Deliberate Syntax Error
 #endif					/* Graphics || Messaging || ISQL */
 	       /* connect to a port */
       	       DEC_NARTHREADS;
+		if ( SSL_accept(ssl) == -1){
+			ERR_print_errors_fp(stderr);
+		
+		
+			
+		
 	       fd = sock_connect(fnamestr, is_udp_or_listener == 1, timeout, af_fam);
+	       /*
+		*Changed This  |
+		*	       V
+		*/
+		/*
+		if(status & Fs_Encrypt)
+			{
+			
+			SSL_set_fd(ssl, fd);
+			
+		}
+		else
+		{
+	
+		}*/
+		}
       	       INC_NARTHREADS_CONTROLLED;
 	    }
 	    /*
@@ -999,6 +1164,10 @@ Deliberate Syntax Error
 	    StrLoc(filename) = fnamestr;
 	    Protect(fl = alcfile(0, status, &filename), runerr(0));
 	    fl->fd.fd = fd;
+		/*check Fs_Encrypt*/
+	    fl->fd.ssl = ssl;
+
+		/* storing SSL context for */
 	    return file(fl);
 	    }
 	 else if (stat(fnamestr, &st) < 0) {
@@ -1676,7 +1845,7 @@ function{0,1} reads(f,i)
 	 /* We do one read(2) call here to avoid interactions with stdio */
 
 	 int fd;
-
+	
 	 if ((fd = get_fd(f, 0)) < 0)
 	    runerr(174, f);
 
