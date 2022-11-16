@@ -162,6 +162,7 @@
 #define Fs_Read         0001            /* file open for reading */
 #define Fs_Write        0002            /* file open for writing */
 #define Fs_Pipe         0020            /* file is a [popen] pipe */
+#define Fs_Encrypt      0040            
 #define Fs_Window       0400            /* file is a window */
 
 

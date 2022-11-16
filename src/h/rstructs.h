@@ -140,7 +140,7 @@ union f {
      struct ptstruct *pt;
 #endif					/* PseudoPty */
    int fd;        /*   other int-based file descriptor */
-   SSL *ssl;
+   SSL* ssl;
    };
 
 struct b_file {			/* file block */

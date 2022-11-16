@@ -42,7 +42,7 @@
 #define Fs_Pipe		020	/* reading or writing on a pipe */
 				/* see also: BPipe down below */
 
-#define Fs_Encrypt      040   
+#define Fs_Encrypt      040        
 
 #define Fs_Reading     0100     /* last file operation was read */
 #define Fs_Writing     0200     /* last file operation was write */

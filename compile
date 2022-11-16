@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd src/runtime
+make iconx -j 9
+cd ../..
+sudo make -j 9 install
