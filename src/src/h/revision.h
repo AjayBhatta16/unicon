@@ -1,0 +1,5 @@
+#define REPO_REVISION "6335_085896a13"
+#define gitDescription "13.2-292-g085896a13-modified"
+#define gitBranch "master"
+#define UNICON_VERSION "13.3"
+#define UNICON_VERSION_DATE "November 13, 2022"
