@@ -9,7 +9,6 @@
  *  system-dependent files and declarations.
  */
 
-
 #if PORT
    /* nothing to do */
 Deliberate Syntax Error
@@ -61,6 +60,14 @@ function{0,1} close(f)
 
 #ifdef PosixFns
       if (BlkD(f,File)->status & Fs_Socket) {
+	 if(status & Fs_Encrypt)
+            {
+
+               SSL_CTX_free(SSL_get_SSL_CTX(BlkLoc(f)->File.fd.ssl));
+	       SSL_free(BlkLoc(f)->File.fd.ssl);
+	       
+                        }
+
 	 BlkLoc(f)->File.status = 0;
 	 StrLoc(BlkLoc(f)->File.fname) = "closed socket";
 	 StrLen(BlkLoc(f)->File.fname) = 13;
@@ -154,7 +161,7 @@ function{0,1} close(f)
 
 #if NT
 #ifndef NTGCC
-// FIXME: the following two lines are no longer needed with recent APIs
+// FIXME: the following two lines are no longer needed with recent APIs 
 //#define pclose _pclose
 //#define popen _popen
 #endif					/* NTGCC */
@@ -203,7 +210,7 @@ function{} exit(status)
 #ifdef Concurrent
    /*
     * exit if this is a thread.
-    * May want to check/fix thread  activator initialization
+    * May want to check/fix thread  activator initialization 
     * depending on desired join semantics.
     * coclean calls pthread_exit() in case of threads.
     */
@@ -243,7 +250,7 @@ function{0,1} getenv(s)
    inline {
       char *p, *sbuf;
       long l;
-
+      
       if ( (sbuf = getenv_var(s)) != NULL) {
 	 l = strlen(sbuf);
 	 Protect(p = alcstr(sbuf,l),runerr(0));
@@ -268,6 +275,7 @@ function{0,1} open(fname, spec)
 #endif						/* Graphics */
    declare {
       tended struct descrip filename;
+      
       }
 
    /*
@@ -300,6 +308,7 @@ function{0,1} open(fname, spec)
       FILE *f = NULL;
       SOCKET fd;
       tended struct b_file *fl;
+      
 #ifdef PosixFns
       struct stat st;
 #endif					/* PosixFns */
@@ -314,6 +323,9 @@ function{0,1} open(fname, spec)
       int do_verify = 1;
 #endif                                  /* Messaging */
 
+
+
+	
 /*
  * The following code is operating-system dependent [@fsys.02].  Make
  *  declarations as needed for opening files.
@@ -388,7 +400,7 @@ Deliberate Syntax Error
 	    case 'j':
 	    case 'J':
 		status |= Fs_Encrypt;
-		printf("Fs_Encrypt: %d\n", Fs_Encrypt);
+		printf("Fs_Encrypt %o", Fs_Encrypt);
 		continue;
 	    case 'a':
 	    case 'A':
@@ -465,9 +477,9 @@ Deliberate Syntax Error
 	       XInitThreads();
 #endif					/* XWindows */
 #ifdef GraphicsGL
-               /*
+               /* 
                 * For now, having FreeType is a requirement for the OpenGL
-                * 2D and 2D/3D implementation
+                * 2D and 2D/3D implementation 
                 */
 #if HAVE_LIBFREETYPE
 	       /* for enabling OpenGL 2D implementation in a convenient way */
@@ -571,25 +583,18 @@ Deliberate Syntax Error
             case 'z':
 	    case 'Z':
 
-#if HAVE_LIBZ
+#if HAVE_LIBZ      
 	       status |= Fs_Compress;
-               continue;
+               continue; 
 #else					/* HAVE_LIBZ */
 	       set_errortext(1045);
-               fail;
+               fail; 
 #endif					/* HAVE_LIBZ */
 
 	    default:
 	       runerr(209, spec);
 	    }
-	}
-
-
-
-
-
-
-
+	 }
 
       /*
        * Construct a mode field for fopen/popen.
@@ -599,103 +604,82 @@ Deliberate Syntax Error
       mode[2] = '\0';
       mode[3] = '\0';
 
-/*
- * FLAGPOINT
- */
-
-SSL *ssl;
-		if(status & Fs_Encrypt)
-		{
-
-		tended char* CertFile;
-		tended char* KeyFile;
-		if(cnv:C_string(attr[0], CertFile))
-		printf("filename: %s\n", CertFile);
-		if(cnv:C_string(attr[1], KeyFile))
-		printf("filename: %s\n", KeyFile);
-		printf("worked");
-
-		{
-			static int SSL_is_initialized = 0;
-			if(!SSL_is_initialized) {
-				SSL_library_init();
-				OpenSSL_add_all_algorithms();
-				SSL_load_error_strings();
-				SSL_is_initialized = 1;
-			}	
-		}
-		SSL_METHOD *method;
-		 /* break point*/
-
-        	method = TLS_server_method();
-		SSL* ctx;
-    		ctx = SSL_CTX_new(method);
+	SSL_CTX *ctx;
+     
+      	
+      if(status & Fs_Encrypt){
+	tended char* CertFile;
+        tended char* KeyFile;
+	
+  
 
 
-    		if(ctx == NULL)
-    		{
-        	ERR_print_errors_fp(stderr);
-        	abort();
-    		}
-
-        	SSL_CTX_set_cipher_list(ctx, "ALL:eNULL");
-
-
-
-
-
-
-
-		if (SSL_CTX_load_verify_locations(ctx, CertFile, KeyFile) != 1)
-        		ERR_print_errors_fp(stderr);
-		else
-			printf("certs loaded\n");
-    		if (SSL_CTX_set_default_verify_paths(ctx) != 1)
-        		ERR_print_errors_fp(stderr);
-
-    		/* break point */
-    		if (SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0)
-    		{
-        		ERR_print_errors_fp(stderr);
-        		abort();
-    		}
-
-        		SSL_CTX_set_default_passwd_cb_userdata(ctx, "12345678");
-    		if (SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0)
-    		{
-        		ERR_print_errors_fp(stderr);
-        		abort();
-    		}
-
-    if (!SSL_CTX_check_private_key(ctx))
-    {
-        fprintf(stderr, "Private key does not match the public certificate\n");
-        abort();
-    }
-
-
-		ssl = SSL_new(ctx);              /* get new SSL state with context */
+        if(cnv:C_string(attr[0], CertFile)!= 1)
+		printf("CertFile Failed!\n");
+        if(cnv:C_string(attr[1], KeyFile)!= 1)
+		printf("KeyFile Failed!\n");
 		
 
+	{
+		static int SSL_is_initialized = 0;
+		if(!SSL_is_initialized)
+		{
+		
+			SSL_library_init();
 
-		/*
+			OpenSSL_add_all_algorithms();  /* load & register all cryptos, etc. */
+        		SSL_load_error_strings();   /* load all error messages */
+			SSL_is_initialized = 1;
+		}
+	}	
+	
+       /* ! Initialize  CTX ! */	
+	SSL_METHOD *method;
+    
 
+    	
+        method = TLS_server_method();
+    	ctx = SSL_CTX_new(method);   /* create new context from method */
+    	if ( ctx == NULL )
+    	{
+        ERR_print_errors_fp(stderr);
+        abort();
+    	}
+	SSL_CTX_set_cipher_list(ctx, "ALL:eNULL");
 
-		if ( cert != NULL )
-       	 	{
-                	printf("Server certificates:\n");
-                	line = X509_NAME_oneline(X509_get_subject_name(cert), 0, 0);
-                	printf("Subject: %s\n", line);
-                	free(line);
-                	line = X509_NAME_oneline(X509_get_issuer_name(cert), 0, 0);
-                	printf("Issuer: %s\n", line);
-                	free(line);
-                	X509_free(cert);
-        	}
-        	else
-                printf("No certificates.\n");*/
+ 	//New lines 
+        if (SSL_CTX_load_verify_locations(ctx, CertFile, KeyFile) != 1)
+        printf("Error 1\n");
+
+        if (SSL_CTX_set_default_verify_paths(ctx) != 1)
+        printf("Error 2\n");
+
+        //End new lines
+
+        /* set the local certificate from CertFile */
+        if (SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0)
+        {
+        printf("Error 3\n");
+
+        abort();
+    }
+    /* set the private key from KeyFile (may be the same as CertFile) */
+        SSL_CTX_set_default_passwd_cb_userdata(ctx, "12345678");
+    if (SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0)
+    {
+       printf("Error 4\n");
+
+        abort();
+    }
+    /* verify private key */
+    if (!SSL_CTX_check_private_key(ctx))
+    {
+       printf("Error 5\n");
+
+        abort();
+    }
+ 
 	}
-
 
 #ifdef Dbm
       /* If we're opening a dbm database, the default is set further down to
@@ -788,7 +772,7 @@ Deliberate Syntax Error
 	    f = gl_wopen(fnamestr, hp, attr, n, &err_index, 1);
          else
 #endif					/* Graphics3D */
-#ifdef GraphicsGL
+#ifdef GraphicsGL 
 	 if (status & Fs_WinGL2D)
 	    f = gl_wopen(fnamestr, hp, attr, n, &err_index, 0);
 	 else
@@ -839,7 +823,7 @@ Deliberate Syntax Error
 
 			}
 		     }
-#endif                                  /* MDEBUG */
+#endif                                  /* MDEBUG */		     
 		     }
 
 		  if (is_ipv4 && is_ipv6)
@@ -931,14 +915,14 @@ Deliberate Syntax Error
       /* check arguments, number and type */
       /* attr[0] is a destination */
       if (n > 0) {
-	 tended char *tmps;
-
-	 if (is:null(attr[0]))
+	 tended char *tmps; 
+      	
+	 if (is:null(attr[0])) 
 	    attr[0] = emptystr;
-
-	 if (!is:string(attr[0]))
+	
+	 if (!is:string(attr[0])) 
 	    runerr(109, attr[0]);
-
+	
 	 if (cnv:C_string(attr[0], tmps))
 	    f = (FILE*) CreateVoiceSession(fnamestr,tmps);
 	 else {
@@ -1047,15 +1031,13 @@ Deliberate Syntax Error
          /*add new code here*/
          f = (FILE *)gzopen(fnamestr, mode);
          }
-      else
+      else 
 #endif					/* HAVE_LIBZ */
 
-
+      
 #ifdef PosixFns
       {
-	int sd;
-	char buf[1024];
-	int bytes;
+	SSL *ssl;
 	 if (status & Fs_Socket) {
 	    if (is_ipv4 && is_ipv6)
 	       af_fam = AF_UNSPEC;
@@ -1072,28 +1054,30 @@ Deliberate Syntax Error
 	    if (status & Fs_Append) {
 	       /* "na" => listen for connections */
       	       DEC_NARTHREADS;
-	       fd = sock_listen(fnamestr, is_udp_or_listener, af_fam);
-         SSL_set_fd(ssl, fd);
-	 	/* Service the connection*/
-		if ( SSL_accept(ssl) == -1 ){     /* do SSL-protocol accept */
-        	        ERR_print_errors_fp(stderr);
-			printf("SSL accept DOES NOT WORK \n");
-		}
-       		 else
-       		 {
 
-			printf("SSL Accepted");
-			SSL_set_fd(ssl, fd);
-			//SSL_read(ssl, buf, sizeof(buf));
-			if (bytes > 0)
-			{
-			//buf[bytes] = 0;
-			//printf("client message \%s", buf);
-			}
-		}
+		fd = sock_listen(fnamestr, is_udp_or_listener, af_fam);
+		printf("Sock listen before if statement \n");
+		if(status & Fs_Encrypt)
+               
+		{
+			printf("after if statement sock listen\n");
+			ssl = SSL_new(ctx);
+     		           SSL_set_fd(ssl, fd);
 
-		SSL_free(ssl);
+        	        if (SSL_accept(ssl) == -1)
+               			printf("SSL FAILED!\n");
+			else
+				printf("SSL Succeeded\n");
+		
 
+
+               
+                }
+		
+
+	       
+	      
+	       
 
       	       INC_NARTHREADS_CONTROLLED;
 	       }
@@ -1106,31 +1090,15 @@ Deliberate Syntax Error
                }
 #endif					/* Graphics || Messaging || ISQL */
 	       /* connect to a port */
-      	       DEC_NARTHREADS;
-		if ( SSL_accept(ssl) == -1){
-			ERR_print_errors_fp(stderr);
-			printf("SSL ACCEPT DOES NOT WORK\n");}
-		else
-			printf("SSL accepted!");
-
+      	       DEC_NARTHREADS;	       
 	       fd = sock_connect(fnamestr, is_udp_or_listener == 1, timeout, af_fam);
-		
-	       /*
-		*Changed This  |
-		*	       V
-		*/
-		/*
-		if(status & Fs_Encrypt)
-			{
-			printf("case Reacheed");
-			SSL_set_fd(ssl, fd);
-
-		}
-		else
-		{
-			printf("didnt work");
+	      /* if(1)
+	       {
+	       ssl = SSL_new(ctx);
+	       printf("SSL address after creation: %p\n", ssl);
+	       SSL_set_fd(ssl, fd);
+	       printf("SSL Address after SSL_set_fd(ssl,fd): %p\n", ssl);
 		}*/
-
       	       INC_NARTHREADS_CONTROLLED;
 	    }
 	    /*
@@ -1157,13 +1125,14 @@ Deliberate Syntax Error
 	    StrLen(filename) = strlen(fnamestr)+1;
 	    StrLoc(filename) = fnamestr;
 	    Protect(fl = alcfile(0, status, &filename), runerr(0));
-	if(1) {
-		printf("Address of structure ins fsys: %p\n", fl);
-		fl -> fd.ssl = ssl;
-		printf("address of ssl in fsys: %p\n", fl->fd.ssl);
-	} else {
-	    
-	}
+	   	printf("Address of stucture in fsys: %p\n", fl);
+		
+		fl->fd.ssl = ssl;
+	 	printf("Address of ssl in fsys: %p\n", ssl);		
+		 
+	    //	fl->fd.fd = fd;
+		
+	    printf("this is status in fsys %o\n", status);
 	    return file(fl);
 	    }
 	 else if (stat(fnamestr, &st) < 0) {
@@ -1323,7 +1292,6 @@ end
 
 
 "read(f) - read line on file f."
-
 function{0,1} read(f)
    /*
     * Default f to &input.
@@ -1505,7 +1473,7 @@ function{0,1} read(f)
 	 * Read a line from a compressed file
 	 */
 	if (status & Fs_Compress) {
-
+            
             if (gzeof(fp)) fail;
       	    DEC_NARTHREADS;
             if (gzgets((gzFile)fp,sbuf,MaxReadStr+1) == Z_NULL) {
@@ -1520,10 +1488,10 @@ function{0,1} read(f)
                sbuf[slen-1] = '\0';
                slen--;
                }
-
+           
 	    }
-
-	else
+           
+	else 
 #endif					/* HAVE_LIBZ */
 
 #ifdef PseudoPty
@@ -1760,7 +1728,7 @@ function{0,1} reads(f,i)
 
         /* FIXME: This is a hack to fix things for the release. The solution to be
 	 * implemented after release: all I/O is low-level, no stdio. This
-	 * makes the Fs_Buff/Fs_Unbuf go away and select will work --
+	 * makes the Fs_Buff/Fs_Unbuf go away and select will work -- 
 	 * correctly. */
         if (strcmp(StrLoc(BlkD(f,File)->fname), "pipe") != 0) {
 	    status |= Fs_Buff;
@@ -2087,7 +2055,7 @@ function{0,1} seek(f,o)
 	    fail;
 	    }
 	 else
-	    return f;
+	    return f;        
 	 }
 #endif                                 /* HAVE_LIBZ */
 
@@ -2136,7 +2104,41 @@ function{0,1} seek(f,o)
       }
 end
 
+/*
+function{0,1} LoadCertificates(ctx, CertFile, Keyfile)     
+    
+SSL_library_init();
+    if (SSL_CTX_load_verify_locations(ctx, CertFile, KeyFile) != 1)
+        return 0;
 
+    if (SSL_CTX_set_default_verify_paths(ctx) != 1)
+        return 0;
+    
+
+  
+    if (SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0)
+    {
+        return 0;
+    }
+    
+        SSL_CTX_set_default_passwd_cb_userdata(ctx, "12345678");
+    if (SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0)
+    {
+        return 0;
+    }
+    
+    if (!SSL_CTX_check_private_key(ctx))
+    {
+        return 0;
+    }
+
+    
+    SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER | SSL_VERIFY_FAIL_IF_NO_PEER_CERT, NULL);
+    SSL_CTX_set_verify_depth(ctx, 4);
+    
+   return 1;
+end
+*/
 #ifdef PosixFns
 "system() - create a new process, optionally mapping its stdin/stdout/stderr."
 
@@ -2171,7 +2173,7 @@ function{0,1} system(argv, d_stdin, d_stdout, d_stderr, mode)
       int i, j, n, is_argv_str=0;
       C_integer i_mode=0;
       tended union block *ep;
-
+	 
       /*
        * We are subverting the RTT type system here w.r.t. garbage
        * collection but we're going to be doing an exec() so ...
@@ -2379,7 +2381,7 @@ function{0,1} system(argv, d_stdin, d_stdout, d_stderr, mode)
       }
 
 #if !NT
-      /*
+      /* 
        * We don't use system(3) any more since the program is allowed to
        * re-map the files even for foreground execution
        */
@@ -2441,7 +2443,7 @@ function{0,1} system(argv, d_stdin, d_stdout, d_stderr, mode)
 	       return C_integer WEXITSTATUS(status);
 	    else
 	       return C_integer status;
-
+	    
 	    }
 	 else {
 	    return C_integer pid;
@@ -2760,7 +2762,8 @@ end
       else
 #endif                                  /* Messaging */
 #ifdef PosixFns
-      if (status & Fs_Socket) {
+      if (status & Fs_Socket){ 
+	 printf("Sock write \n");
 	 if (sock_write(f.fd, "\n", 1) < 0){
 	    MUTEX_UNLOCKID(fblk->mutexid);
 #if terminate
@@ -2817,7 +2820,7 @@ end
 	    runerr(214);
 	    }
          fflush(f.fp);
-
+      
 #endif					/* HAVE_LIBZ */
 
 #ifdef PosixFns
@@ -2964,7 +2967,7 @@ function {1} name(x[nargs])
 #if HAVE_LIBZ
                      if (status & Fs_Compress) {
 			if (gzputc(f.fp,'\n')==-1){
-#ifdef Concurrent
+#ifdef Concurrent 
 			   if (fblk)
 			   MUTEX_UNLOCKID(fblk->mutexid);
 #endif					/* Concurrent */
@@ -2982,14 +2985,14 @@ function {1} name(x[nargs])
 			   struct MFile *mf = f.mf;
 			   extern int Merror;
 			   if (!MFIN(mf, WRITING)) {
-#ifdef Concurrent
+#ifdef Concurrent 
 			      if (fblk)
 			      MUTEX_UNLOCKID(fblk->mutexid);
 #endif					/* Concurrent */
 			      runerr(213);
 			      }
 			   if (tp_write(mf->tp, "\n", 1) < 0) {
-#ifdef Concurrent
+#ifdef Concurrent 
 			      if (fblk)
 			      MUTEX_UNLOCKID(fblk->mutexid);
 #endif					/* Concurrent */
@@ -3001,7 +3004,7 @@ function {1} name(x[nargs])
 #endif
 			      }
 			   if (Merror != 0) {
-#ifdef Concurrent
+#ifdef Concurrent 
 			      if (fblk)
 		    	      MUTEX_UNLOCKID(fblk->mutexid);
 #endif					/* Concurrent */
@@ -3011,9 +3014,9 @@ function {1} name(x[nargs])
 			else
 #endif                                  /* Messaging */
 #ifdef PosixFns
-			if (status & Fs_Socket) {
+			if (status & Fs_Socket) { 
 			   if (sock_write(f.fd, "\n", 1) < 0){
-#ifdef Concurrent
+#ifdef Concurrent 
 			      if (fblk)
 			      MUTEX_UNLOCKID(fblk->mutexid);
 #endif					/* Concurrent */
@@ -3029,7 +3032,7 @@ function {1} name(x[nargs])
 #endif					/* PosixFns */
 			putc('\n', f.fp);
 			if (ferror(f.fp)){
-#ifdef Concurrent
+#ifdef Concurrent 
 			   if (fblk)
 	    		   MUTEX_UNLOCKID(fblk->mutexid);
 #endif					/* Concurrent */
@@ -3042,7 +3045,7 @@ function {1} name(x[nargs])
 #ifdef Graphics
 			}
 #endif					/* Graphics */
-#ifdef Concurrent
+#ifdef Concurrent 
 		     if (fblk)
 			MUTEX_UNLOCKID(fblk->mutexid);
 #endif					/* Concurrent */
@@ -3055,14 +3058,14 @@ function {1} name(x[nargs])
 		   */
 		  status = BlkD(x[n],File)->status;
 		  if ((status & Fs_Write) == 0){
-#ifdef Concurrent
+#ifdef Concurrent 
 		     if (fblk)
 	    	     MUTEX_UNLOCKID(fblk->mutexid);
 #endif					/* Concurrent */
 		     runerr(213, x[n]);
 		     }
 		  f.fp = BlkLoc(x[n])->File.fd.fp;
-#ifdef Concurrent
+#ifdef Concurrent 
 		  fblk = BlkD(x[n], File);
         	  MUTEX_LOCKID_CONTROLLED(fblk->mutexid);
 #endif					/* Concurrent */
@@ -3103,7 +3106,7 @@ function {1} name(x[nargs])
 #if HAVE_LIBZ
 	          if (status & Fs_Compress){
                      if (gzputs(f.fp, StrLoc(t))==-1){
-	    	     	MUTEX_UNLOCKID(fblk->mutexid);
+	    	     	MUTEX_UNLOCKID(fblk->mutexid); 
 			runerr(214);
 			}
                      }
@@ -3127,16 +3130,23 @@ function {1} name(x[nargs])
 
 #ifdef PosixFns
 		     if (status & Fs_Socket) {
-
-			if (sock_write(f.fd, StrLoc(t), StrLen(t)) < 0) {
-        	  	   MUTEX_UNLOCKID(fblk->mutexid);
+			if(status & Fs_Encrypt)
+			{
+			 
+			   SSL_write(f.ssl, StrLoc(t), StrLen(t));
+			   
+			}
+			else{
+			   if (sock_write(f.fd, StrLoc(t), StrLen(t)) < 0) {
+        	  	      MUTEX_UNLOCKID(fblk->mutexid);
 #if terminate
-			   syserr("sock_write failed in stop()");
+			      syserr("sock_write failed in stop()");
 #else
-			   set_syserrortext(errno);
-			   fail;
+			      set_syserrortext(errno);
+			      fail;
 #endif
 			   }
+			}
 		     } else {
 #endif					/* PosixFns */
 		     if (putstr(f.fp, &t) == Failed)
@@ -3340,7 +3350,7 @@ function{0,1} delay(n)
         fail;
 #ifdef Graphics
 {
-#if !ConcurrentCOMPILER
+#if !ConcurrentCOMPILER	
       CURTSTATE();
 #endif                                     /* ConcurrentCOMPILER */
       pollctr >>= 1;

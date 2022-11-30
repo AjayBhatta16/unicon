@@ -3091,7 +3091,9 @@ function{0, 1} ready(f, i)
       int status, fd;
       tended struct descrip desc;
       status = BlkD(f,File)->status;
-
+      
+      
+      printf("we are ready to read from the socket\n");
       if (!(status & Fs_Read))
 	  runerr(212, f);
 
@@ -3101,21 +3103,7 @@ function{0, 1} ready(f, i)
          fail;
          }
 #endif					/* Graphics */
-		printf("%d",status & Fs_Encrypt);
-		if(1) {
-			int tb;
-			char buf[1024];
-			//Protect(buf = alcstr(NULL, tb), runerr(0));
-			SSL* ssl;
-			ssl = BlkD(f,File)->fd.ssl;
-			printf("Address of structure in fxposix: %p\n", BlkD(f,File));
-			SSL_get_fd(ssl);
-			tb = SSL_read(ssl, buf, sizeof(buf));
-			printf("value of tb: %d\n", tb);
-			StrLoc(desc) = buf;
-			StrLen(desc) = 1;
-			return desc;
-	} 
+
 #if defined(PseudoPty)
       if (status & Fs_Pty) {
          tended char *sbuf = NULL;
@@ -3137,6 +3125,7 @@ function{0, 1} ready(f, i)
 #endif
 	    if (i == 0) i = tb;
             else if (tb < i) i = tb;
+		/* use */
             Protect(sbuf = alcstr(NULL, i), runerr(0));
 #if NT
             status = ReadFile(pt->master_read, sbuf, i, &tb, NULL);
@@ -3147,6 +3136,7 @@ function{0, 1} ready(f, i)
 	    if (!status) fail;
             StrLoc(desc) = sbuf;
             StrLen(desc) = tb;
+	    
             return desc;
 	 }
 	else fail;
@@ -3163,8 +3153,35 @@ function{0, 1} ready(f, i)
 */
 
       IntVal(amperErrno) = 0;
+
+
+
+
+/* if status & Fs_Encrypt */
+	if (status & Fs_Encrypt){
+
+
+
+
+	char buf[2048];
+	int tb;
+	SSL *ssl;
+        ssl = BlkD(f,File)->fd.ssl;
+	
+        
+	tb = SSL_read(ssl, buf, sizeof(buf));
+	printf("Test\n");	
+	if (tb == 0)
+	fail;
+
+	StrLoc(desc) = buf;
+	printf("BUF: %s", buf);
+	StrLen(desc) = tb;
+	}
+      else{
       if (u_read(fd, i, status, &desc) == 0)
-	 fail;
+	 fail;}
+   
       return desc;
    }
 end

@@ -12,7 +12,6 @@
 #ifdef PosixFns
 
 #include "../h/opdefs.h"
-// #include <stdio.h>
 
 #define String(d, s) do {           \
       int len = strlen(s);          \
@@ -27,131 +26,131 @@
 #define ipad(wp)  do ; while (0)
 #endif
 
-/* Signal definitions */
-#passthru #if !defined(SIGABRT)
-#passthru #define SIGABRT 0
-#passthru #endif
-#passthru #if !defined(SIGALRM)
-#passthru #define SIGALRM 0
-#passthru #endif
-#passthru #if !defined(SIGBREAK)
-#passthru #define SIGBREAK 0
-#passthru #endif
-#passthru #if !defined(SIGBUS)
-#passthru #define SIGBUS 0
-#passthru #endif
-#passthru #if !defined(SIGCHLD)
-#passthru #define SIGCHLD 0
-#passthru #endif
-#passthru #if !defined(SIGCLD)
-#passthru #define SIGCLD 0
-#passthru #endif
-#passthru #if !defined(SIGCONT)
-#passthru #define SIGCONT 0
-#passthru #endif
-#passthru #if !defined(SIGEMT)
-#passthru #define SIGEMT 0
-#passthru #endif
-#passthru #if !defined(SIGFPE)
-#passthru #define SIGFPE 0
-#passthru #endif
-#passthru #if !defined(SIGFREEZE)
-#passthru #define SIGFREEZE 0
-#passthru #endif
-#passthru #if !defined(SIGHUP)
-#passthru #define SIGHUP 0
-#passthru #endif
-#passthru #if !defined(SIGILL)
-#passthru #define SIGILL 0
-#passthru #endif
-#passthru #if !defined(SIGINT)
-#passthru #define SIGINT 0
-#passthru #endif
-#passthru #if !defined(SIGIO)
-#passthru #define SIGIO 0
-#passthru #endif
-#passthru #if !defined(SIGIOT)
-#passthru #define SIGIOT 0
-#passthru #endif
-#passthru #if !defined(SIGKILL)
-#passthru #define SIGKILL 0
-#passthru #endif
-#passthru #if !defined(SIGLOST)
-#passthru #define SIGLOST 0
-#passthru #endif
-#passthru #if !defined(SIGLWP)
-#passthru #define SIGLWP 0
-#passthru #endif
-#passthru #if !defined(SIGPIPE)
-#passthru #define SIGPIPE 0
-#passthru #endif
-#passthru #if !defined(SIGPOLL)
-#passthru #define SIGPOLL 0
-#passthru #endif
-#passthru #if !defined(SIGPROF)
-#passthru #define SIGPROF 0
-#passthru #endif
-#passthru #if !defined(SIGPWR)
-#passthru #define SIGPWR 0
-#passthru #endif
-#passthru #if !defined(SIGQUIT)
-#passthru #define SIGQUIT 0
-#passthru #endif
-#passthru #if !defined(SIGSEGV)
-#passthru #define SIGSEGV 0
-#passthru #endif
-#passthru #if !defined(SIGSTOP)
-#passthru #define SIGSTOP 0
-#passthru #endif
-#passthru #if !defined(SIGSYS)
-#passthru #define SIGSYS 0
-#passthru #endif
-#passthru #if !defined(SIGTERM)
-#passthru #define SIGTERM 0
-#passthru #endif
-#passthru #if !defined(SIGTHAW)
-#passthru #define SIGTHAW 0
-#passthru #endif
-#passthru #if !defined(SIGTRAP)
-#passthru #define SIGTRAP 0
-#passthru #endif
-#passthru #if !defined(SIGTSTP)
-#passthru #define SIGTSTP 0
-#passthru #endif
-#passthru #if !defined(SIGTTIN)
-#passthru #define SIGTTIN 0
-#passthru #endif
-#passthru #if !defined(SIGTTOU)
-#passthru #define SIGTTOU 0
-#passthru #endif
-#passthru #if !defined(SIGURG)
-#passthru #define SIGURG 0
-#passthru #endif
-#passthru #if !defined(SIGUSR1)
-#passthru #define SIGUSR1 0
-#passthru #endif
-#passthru #if !defined(SIGUSR2)
-#passthru #define SIGUSR2 0
-#passthru #endif
-#passthru #if !defined(SIGVTALRM)
-#passthru #define SIGVTALRM 0
-#passthru #endif
-#passthru #if !defined(SIGWAITING)
-#passthru #define SIGWAITING 0
-#passthru #endif
-#passthru #if !defined(SIGWINCH)
-#passthru #define SIGWINCH 0
-#passthru #endif
-#passthru #if !defined(SIGXCPU)
-#passthru #define SIGXCPU 0
-#passthru #endif
-#passthru #if !defined(SIGXFSZ)
-#passthru #define SIGXFSZ 0
-#passthru #endif
+/* Signal definitions */ 
+#passthru #if !defined(SIGABRT) 
+#passthru #define SIGABRT 0 
+#passthru #endif 
+#passthru #if !defined(SIGALRM) 
+#passthru #define SIGALRM 0 
+#passthru #endif 
+#passthru #if !defined(SIGBREAK) 
+#passthru #define SIGBREAK 0 
+#passthru #endif 
+#passthru #if !defined(SIGBUS) 
+#passthru #define SIGBUS 0 
+#passthru #endif 
+#passthru #if !defined(SIGCHLD) 
+#passthru #define SIGCHLD 0 
+#passthru #endif 
+#passthru #if !defined(SIGCLD) 
+#passthru #define SIGCLD 0 
+#passthru #endif 
+#passthru #if !defined(SIGCONT) 
+#passthru #define SIGCONT 0 
+#passthru #endif 
+#passthru #if !defined(SIGEMT) 
+#passthru #define SIGEMT 0 
+#passthru #endif 
+#passthru #if !defined(SIGFPE) 
+#passthru #define SIGFPE 0 
+#passthru #endif 
+#passthru #if !defined(SIGFREEZE) 
+#passthru #define SIGFREEZE 0 
+#passthru #endif 
+#passthru #if !defined(SIGHUP) 
+#passthru #define SIGHUP 0 
+#passthru #endif 
+#passthru #if !defined(SIGILL) 
+#passthru #define SIGILL 0 
+#passthru #endif 
+#passthru #if !defined(SIGINT) 
+#passthru #define SIGINT 0 
+#passthru #endif 
+#passthru #if !defined(SIGIO) 
+#passthru #define SIGIO 0 
+#passthru #endif 
+#passthru #if !defined(SIGIOT) 
+#passthru #define SIGIOT 0 
+#passthru #endif 
+#passthru #if !defined(SIGKILL) 
+#passthru #define SIGKILL 0 
+#passthru #endif 
+#passthru #if !defined(SIGLOST) 
+#passthru #define SIGLOST 0 
+#passthru #endif 
+#passthru #if !defined(SIGLWP) 
+#passthru #define SIGLWP 0 
+#passthru #endif 
+#passthru #if !defined(SIGPIPE) 
+#passthru #define SIGPIPE 0 
+#passthru #endif 
+#passthru #if !defined(SIGPOLL) 
+#passthru #define SIGPOLL 0 
+#passthru #endif 
+#passthru #if !defined(SIGPROF) 
+#passthru #define SIGPROF 0 
+#passthru #endif 
+#passthru #if !defined(SIGPWR) 
+#passthru #define SIGPWR 0 
+#passthru #endif 
+#passthru #if !defined(SIGQUIT) 
+#passthru #define SIGQUIT 0 
+#passthru #endif 
+#passthru #if !defined(SIGSEGV) 
+#passthru #define SIGSEGV 0 
+#passthru #endif 
+#passthru #if !defined(SIGSTOP) 
+#passthru #define SIGSTOP 0 
+#passthru #endif 
+#passthru #if !defined(SIGSYS) 
+#passthru #define SIGSYS 0 
+#passthru #endif 
+#passthru #if !defined(SIGTERM) 
+#passthru #define SIGTERM 0 
+#passthru #endif 
+#passthru #if !defined(SIGTHAW) 
+#passthru #define SIGTHAW 0 
+#passthru #endif 
+#passthru #if !defined(SIGTRAP) 
+#passthru #define SIGTRAP 0 
+#passthru #endif 
+#passthru #if !defined(SIGTSTP) 
+#passthru #define SIGTSTP 0 
+#passthru #endif 
+#passthru #if !defined(SIGTTIN) 
+#passthru #define SIGTTIN 0 
+#passthru #endif 
+#passthru #if !defined(SIGTTOU) 
+#passthru #define SIGTTOU 0 
+#passthru #endif 
+#passthru #if !defined(SIGURG) 
+#passthru #define SIGURG 0 
+#passthru #endif 
+#passthru #if !defined(SIGUSR1) 
+#passthru #define SIGUSR1 0 
+#passthru #endif 
+#passthru #if !defined(SIGUSR2) 
+#passthru #define SIGUSR2 0 
+#passthru #endif 
+#passthru #if !defined(SIGVTALRM) 
+#passthru #define SIGVTALRM 0 
+#passthru #endif 
+#passthru #if !defined(SIGWAITING) 
+#passthru #define SIGWAITING 0 
+#passthru #endif 
+#passthru #if !defined(SIGWINCH) 
+#passthru #define SIGWINCH 0 
+#passthru #endif 
+#passthru #if !defined(SIGXCPU) 
+#passthru #define SIGXCPU 0 
+#passthru #endif 
+#passthru #if !defined(SIGXFSZ) 
+#passthru #define SIGXFSZ 0 
+#passthru #endif 
 
 stringint signalnames[] = {
    { 0,			40 },
-   { "SIGABRT",		SIGABRT },
+   { "SIGABRT",		SIGABRT },	
    { "SIGALRM",         SIGALRM },
    { "SIGBREAK",        SIGBREAK },
    { "SIGBUS",          SIGBUS },
@@ -272,12 +271,14 @@ int get_fd(struct descrip file, unsigned int errmask)
 #endif					/* NT */
 
       if (status & Fs_Socket) {
-         printf("This is a socket\n");
-	 if(status & Fs_Encrypt) 
-            return SSL_get_fd(BlkD(file,File)->fd.ssl);
-	 else 
+	 printf("this is a socket %o\n", status);
+	 if(status & Fs_Encrypt){
+	    printf("socket Fs_Encrypt hit %o\n", status);
+	    return SSL_get_fd(BlkD(file,File)->fd.ssl);
+	 }
+	 else
 	    return BlkD(file,File)->fd.fd;
-      } 
+	 }
       else if (status & Fs_Messaging)
 	 return tp_fileno(BlkD(file,File)->fd.mf->tp);
       else
@@ -291,7 +292,7 @@ char *name;
 #if NT
    return -1;
 #else					/* NT */
-   struct passwd *pw, pwbuf;
+   struct passwd *pw, pwbuf;      
    char buf[1024];
    if ((getpwnam_r(name, &pwbuf, buf, 1024, &pw)!=0) || (pw == NULL))
       return -1;
@@ -318,7 +319,7 @@ char *mode;
 int oldmode;
 {
    int i;
-
+   
    /* The pattern is [ugoa]*[+-=][rwxRWXstugo]* */
    int which = 0, do_umask;
    char *p = mode, *q, op;
@@ -401,7 +402,7 @@ int oldmode;
 
    if ((do_umask = (which == 0)))
       which = 7;
-
+      
    op = *p++;
 
    /* We have: which field(s) in "which", an operator in "op" */
@@ -452,7 +453,7 @@ int oldmode;
 #else					/* NT */
 	       int u = umask(0);
 	       umask(u);
-#endif					/* NT */
+#endif					/* NT */	
 	       nvalue = value & ~u;
 	    } else
 	       nvalue = value;
@@ -608,7 +609,7 @@ struct b_record **rp;
       }
    StrLoc((*rp)->fields[4]) = alcstr(user, strlen(user));
    StrLen((*rp)->fields[4]) = strlen(user);
-
+   
    getgrgid_r(st->st_gid, &grbuf, buf, 4096, &gr);
    if (gr == 0){
       sprintf(mode, "%d", st->st_gid);
@@ -823,14 +824,14 @@ char *name;
    return 0;
 }
 
-/*
+/* 
  * Sockets
  *
  * IMPORTANT NOTE: IPv6 (AF_INET6) is NOT implemented.
  *
  * There are two routines that are provided (via open()) - connect (for a
- * client) and listen (for servers).
- *
+ * client) and listen (for servers). 
+ * 
  * Four procedures are not required for starting a TCP server, we combine
  * them. The standard BSD way of doing it is:
  *
@@ -989,7 +990,7 @@ struct addrinfo *uni_getaddrinfo(char* addr, char* p, int is_udp, int family){
 /*
  * Empty handler for connection alarm signals (used for timeouts).
  */
-/* static void on_alarm(int x)
+/* static void on_alarm(int x) 
 {
 }
 */
@@ -1153,7 +1154,7 @@ int sock_connect(char *fn, int is_udp, int timeout, int af_fam)
          FD_ZERO(&es);
          FD_SET(s, &es);
          errno = 0;
-         sc = select(FD_SETSIZE, NULL, &ws, &es, &tv);
+         sc = select(FD_SETSIZE, NULL, &ws, &es, &tv);      
          /*
 	  * A result of 0 means timeout; in this case errno will be zero too,
           * and that can be used to distinguish from another error condition.
@@ -1168,14 +1169,14 @@ int sock_connect(char *fn, int is_udp, int timeout, int af_fam)
          if (getsockopt(s, SOL_SOCKET, SO_ERROR, &cc, &cclen) < 0) {
             close(s);
             return 0;
-         }
+         }         
 
          if (cc != 0) {
             /* There was an error, so set errno and fail */
             errno = cc;
             close(s);
             return 0;
-         }
+         }         
 
          return s;
       }
@@ -1185,7 +1186,7 @@ int sock_connect(char *fn, int is_udp, int timeout, int af_fam)
       int connect_err = WSAGetLastError();
       unsigned long imode = 0;
       if (ioctlsocket(s, FIONBIO, &imode) < 0) {
-         errno = WSAGetLastError();
+         errno = WSAGetLastError();      
          closesocket(s);
          return 0;
       }
@@ -1204,11 +1205,11 @@ int sock_connect(char *fn, int is_udp, int timeout, int af_fam)
          FD_ZERO(&es);
          FD_SET(s, &es);
          WSASetLastError(0);
-         sc = select(FD_SETSIZE, NULL, &ws, &es, &tv);
+         sc = select(FD_SETSIZE, NULL, &ws, &es, &tv);      
          /* A result of 0 means timeout; in this case WSAGetLastError() will return zero,
             and that can be used to distinguish from another error condition. */
          if (sc <= 0) {
-            errno = WSAGetLastError();
+            errno = WSAGetLastError();      
             closesocket(s);
             return 0;
          }
@@ -1216,17 +1217,17 @@ int sock_connect(char *fn, int is_udp, int timeout, int af_fam)
          /* Get the error code of the connect */
          cclen = sizeof(cc);
          if (getsockopt(s, SOL_SOCKET, SO_ERROR, (char*)&cc, &cclen) < 0) {
-            errno = WSAGetLastError();
+            errno = WSAGetLastError();      
             closesocket(s);
             return 0;
-         }
+         }         
 
          if (cc != 0) {
             /* There was an error, so set errno and fail */
             errno = cc;
             closesocket(s);
             return 0;
-         }
+         }         
 
          return s;
       }
@@ -1253,252 +1254,6 @@ ip_version(const char *src) {
     return -1;
 }
 
-int ssl_sock_connect(char *fn, int is_udp, int timeout, int af_fam, char* file1, char* file2)
-{
-
-  int saveflags, rc, s, len;
-   struct sockaddr *sa;
-   char *p, fname[BUFSIZ];
-   struct addrinfo *res, *res0, *saddrinfo;
-#if UNIX
-   struct sockaddr_un saddr_un;
-   int pathbuf_len = sizeof(saddr_un.sun_path);
-#endif					/* UNIX */
-
-   errno = 0;
-   SAFE_strncpy(fname, fn, sizeof(fname));
-
-   /*
-    * find the last colon and get the port.
-    */
-   if (((p = strrchr(fname, ':')) != 0) ) {
-      *p = 0;
-      res0 = uni_getaddrinfo(fname, p+1, is_udp, af_fam);
-      /* Restore the argument just in case */
-      *p = ':';
-
-      if (!res0)
-	return 0;
-
-      s = -1;
-      for (res = res0; res; res = res->ai_next) {
-	s = socket(res->ai_family, res->ai_socktype,
-		   res->ai_protocol);
-	if (s < 0) {
-	  continue;
-	}
-
-	/*
-	if (connect(s, res->ai_addr, res->ai_addrlen) < 0) {
-	  close(s);
-	  s = -1;
-	  continue;
-	}
-	*/
-
-	break;  /* okay we got one */
-      }
-
-      if (s < 0) {
-	// failed to create a socket to any of the resloved names
-	freeaddrinfo(res0);
-	return 0;
-      }
-
-      // This is the node we care about, free all other nodes before and after it
-      saddrinfo = res;
-      sa = saddrinfo->ai_addr;
-      len = saddrinfo->ai_addrlen;
-      if (saddrinfo == res0){
-	if (saddrinfo->ai_next != NULL){
-	  freeaddrinfo(saddrinfo->ai_next);
-	  saddrinfo->ai_next = NULL;
-	  }
-      }
-      else {
-	for (res = res0; res->ai_next != saddrinfo; res = res->ai_next);
-	res->ai_next = NULL;
-	freeaddrinfo(res0);
-
-	res = saddrinfo->ai_next;
-	if (res){
-	  saddrinfo->ai_next = NULL;
-	  freeaddrinfo(res);
-	}
-      }
-   }
-   else {
-      /* UNIX domain socket */
-#if NT
-      return 0;
-#endif
-#if UNIX
-      if (is_udp || (s = socket(PF_UNIX, SOCK_STREAM, 0)) < 0)
-	 return 0;
-      saddr_un.sun_family = AF_UNIX;
-      strncpy(saddr_un.sun_path, fname, pathbuf_len);
-      /* NUL-terminate just in case.... */
-      saddr_un.sun_path[pathbuf_len - 1] = 0;
-      len = sizeof(saddr_un.sun_family) + strlen(saddr_un.sun_path);
-#ifdef SIN6_LEN  /* BSD_4_4_LITE */
-      len += sizeof(saddr_un.sun_len);
-      saddr_un.sun_len = len;
-#endif
-      sa = (struct sockaddr*) &saddr_un;
-#endif					/* UNIX */
-   }
-
-   /* We don't connect UDP sockets but always use sendto(2). */
-   if (is_udp) {
-      /* save the sockaddr struct */
-      saddrs = realloc(saddrs, (s+1) * (sizeof(struct addrinfo *)));
-      if (saddrs == NULL) {
-	 close(s);
-	 return 0;
-	 }
-      saddrs[s] = saddrinfo;
-      return s;
-      }
-
-   if (timeout > 0) {
-#if UNIX
-      /* Save existing flags for restore later */
-      saveflags = fcntl(s, F_GETFL, 0);
-      if (saveflags < 0) {
-         close(s);
-         return 0;
-      }
-      /* Turn on non-blocking flag - this will make connect
-         return immediately.  */
-      if (fcntl(s, F_SETFL, saveflags|O_NONBLOCK) < 0) {
-         close(s);
-         return 0;
-      }
-#endif					/* UNIX */
-#if NT
-      /* Turn on non-blocking flag so connect will return immediately. */
-      unsigned long imode = 1;
-      if (ioctlsocket(s, FIONBIO, &imode) < 0) {
-         errno = WSAGetLastError();
-         closesocket(s);
-         return 0;
-      }
-#endif					/* NT */
-   }
-
-   rc = connect(s, sa, len);
-
-   if (timeout > 0) {
-#if UNIX
-      /* Reset the old flags, but avoiding overwriting the value of errno */
-      int connect_err = errno;
-      if (fcntl(s, F_SETFL, saveflags) < 0) {
-         close(s);
-         return 0;
-      }
-      errno = connect_err;
-
-      if (rc < 0 && errno == EINPROGRESS) {
-         /* The connect is in progress, so select() must be used to wait. */
-         fd_set ws, es;
-         struct timeval tv;
-         int sc, cc;
-	 unsigned int cclen;
-
-         tv.tv_sec = timeout / 1000;
-         tv.tv_usec = 1000 * (timeout % 1000);
-         FD_ZERO(&ws);
-         FD_SET(s, &ws);
-         FD_ZERO(&es);
-         FD_SET(s, &es);
-         errno = 0;
-         sc = select(FD_SETSIZE, NULL, &ws, &es, &tv);
-         /*
-	  * A result of 0 means timeout; in this case errno will be zero too,
-          * and that can be used to distinguish from another error condition.
-	  */
-         if (sc <= 0) {
-            close(s);
-            return 0;
-            }
-
-         /* Get the error code of the connect */
-         cclen = sizeof(cc);
-         if (getsockopt(s, SOL_SOCKET, SO_ERROR, &cc, &cclen) < 0) {
-            close(s);
-            return 0;
-         }
-
-         if (cc != 0) {
-            /* There was an error, so set errno and fail */
-            errno = cc;
-            close(s);
-            return 0;
-         }
-
-         return s;
-      }
-#endif					/* UNIX */
-#if NT
-      /* Turn off non-blocking flag */
-      int connect_err = WSAGetLastError();
-      unsigned long imode = 0;
-      if (ioctlsocket(s, FIONBIO, &imode) < 0) {
-         errno = WSAGetLastError();
-         closesocket(s);
-         return 0;
-      }
-      errno = connect_err;
-
-      if (rc < 0 && errno == WSAEWOULDBLOCK) {
-         /* The connect is in progress, so select() must be used to wait. */
-         fd_set ws, es;
-         struct timeval tv;
-         int sc, cc, cclen;
-
-         tv.tv_sec = timeout / 1000;
-         tv.tv_usec = 1000 * (timeout % 1000);
-         FD_ZERO(&ws);
-         FD_SET(s, &ws);
-         FD_ZERO(&es);
-         FD_SET(s, &es);
-         WSASetLastError(0);
-         sc = select(FD_SETSIZE, NULL, &ws, &es, &tv);
-         /* A result of 0 means timeout; in this case WSAGetLastError() will return zero,
-            and that can be used to distinguish from another error condition. */
-         if (sc <= 0) {
-            errno = WSAGetLastError();
-            closesocket(s);
-            return 0;
-         }
-
-         /* Get the error code of the connect */
-         cclen = sizeof(cc);
-         if (getsockopt(s, SOL_SOCKET, SO_ERROR, (char*)&cc, &cclen) < 0) {
-            errno = WSAGetLastError();
-            closesocket(s);
-            return 0;
-         }
-
-         if (cc != 0) {
-            /* There was an error, so set errno and fail */
-            errno = cc;
-            closesocket(s);
-            return 0;
-         }
-
-         return s;
-      }
-#endif					/* NT */
-   }
-
-   if (rc < 0) {
-      close(s);
-      return 0;
-   }
-
-   return s;
-}
 
 /*
  * Although this function is named "listen", it opens all incoming sockets,
@@ -1594,9 +1349,18 @@ int sock_listen(char *addr, int is_udp_or_listener, int af_fam)
 
    if (is_udp_or_listener)
      return s;
-
-   fromlen = sizeof(from);
+  
+   fromlen = sizeof(from); 
+  /* SSL *ssl;
+	ssl = BlkD(f,File)->fd.ssl;
    DEC_NARTHREADS;
+  // if(status & Fs_Encrypt)
+	//{
+	if (SSL_accept(ssl) == -1) 
+		printf("SSL FAILED!\n");
+	//}*/
+	
+  
    if ((fd = accept(s, (struct sockaddr*) &from, &fromlen)) < 0) fd = 0;
    INC_NARTHREADS_CONTROLLED;
 
@@ -1783,17 +1547,21 @@ int sock_write(int f, char *msg, int n)
    int rv, s_type;
    unsigned int len;
    SOCKET fd = ((SOCKET)f); /* used to wrap f inside an fdup, but no more */
-
    len = sizeof(s_type);
+   printf("Sock_write \n");
    if (getsockopt(fd, SOL_SOCKET, SO_TYPE, (char *)&s_type, &len) < 0)
       return 0;
 
    if (s_type == SOCK_DGRAM){
+      printf("????????msg: %s", msg);
       rv = sendto(fd, msg, n, 0,
 		  saddrs[fd]->ai_addr, saddrs[fd]->ai_addrlen);
+	
    }
    else
+      printf("????????msg2: %s", msg);
       rv = send(fd, msg, n, 0);
+      
    return rv;
 }
 
@@ -1867,7 +1635,7 @@ void catstrs(char **ptrs, dptr d)
       nmem++;
 
    StrLoc(*d) = p = alcstr(NULL, nmem*9);
-
+   
    for (i = 0; i < nmem; i++) {
       char *q = ptrs[i];
       while ((*p = *q++))
@@ -1905,7 +1673,7 @@ dptr result;
    String(rp->fields[1], gr->gr_passwd);
    rp->fields[2].dword = D_Integer;
    IntVal(rp->fields[2]) = gr->gr_gid;
-
+   
    catstrs(gr->gr_mem, &rp->fields[3]);
    return result;
 }
@@ -1966,7 +1734,7 @@ struct addrinfo *res0;
       String(rp->fields[0], res0->ai_canonname);
    else
       String(rp->fields[0], name);
-
+      
    String(rp->fields[1], name);
 
    /* Retrieve each address and print out the hex bytes */
@@ -1974,7 +1742,7 @@ struct addrinfo *res0;
    for(res = res0; res != NULL ; res = res->ai_next) {
        len += res->ai_addrlen;
    }
-
+   
    StrLoc(rp->fields[2]) = p = alcstr(NULL, len);
 
    for(res = res0; res != NULL ; res = res->ai_next) {
@@ -1995,8 +1763,8 @@ struct addrinfo *res0;
 #if NT
 
                 /*
-		 * The buffer length is changed by each call to
-		 * WSAAddresstoString, So we need to set it for each
+		 * The buffer length is changed by each call to 
+		 * WSAAddresstoString, So we need to set it for each 
                  * iteration through the loop for safety
 		 */
 
@@ -2023,7 +1791,7 @@ struct addrinfo *res0;
         }
 /*
  *   Not Yet used! left here for possible expansions in the future.
- *
+ * 
         printf("\tSocket type: ");
         switch (res->ai_socktype) {
             case 0:
@@ -2105,7 +1873,7 @@ struct hostent *hs;
       nmem++;
 
    StrLoc(rp->fields[2]) = p = alcstr(NULL, nmem*16);
-
+   
    addr = (unsigned int *) hs->h_addr_list[0];
    for (i = 0; i < nmem; i++) {
       int a = ntohl(*addr);
@@ -2190,7 +1958,7 @@ dptr calliconproc(struct descrip proc, dptr args, int nargs)
    sp += (nargs+1)*2;
    ipc.op = (int *)callproc;
 
-#ifdef TSTATARG
+#ifdef TSTATARG 
    retval = interp(0, NULL, CURTSTATARG);
 #else 		 	   	  	 /* TSTATARG */
    retval = interp(0, NULL);
@@ -2270,7 +2038,7 @@ int sig;
 #ifdef MultiProgram
       if ((!is:null(curpstate->eventmask)) &&
 	  Testb((word)ToAscii(E_Signal), curpstate->eventmask)) {
-	 /* if we are in the TP and it has no signal handling
+	 /* if we are in the TP and it has no signal handling 
 	  * report the signal back to its parent
 	  */
 	 curpstate->signal = sig;
@@ -2306,7 +2074,7 @@ int sig;
      (void) calliconproc(proc, &val, 1);
    }
 #endif					/* COMPILER */
-
+   
    /* Restore signal just in case (for non-BSD systems) */
    signal(sig, signal_dispatcher);
 }
@@ -2497,9 +2265,9 @@ struct b_list *findactivewindow(struct b_list *lws)
 	 j = ep->Lelem.first + i;
 	 if (j >= ep->Lelem.nslots)
 	    j -= ep->Lelem.nslots;
-
+	 
          if (!(is:file(ep->Lelem.lslots[j]) &&
-	       (status = BlkD(ep->Lelem.lslots[j],File)->status) &&
+	       (status = BlkD(ep->Lelem.lslots[j],File)->status) &&      
 	       (status & Fs_Window)))
             syserr("internal error calling findactivewindow()");
          if (!(status & Fs_Read)) {
@@ -2520,6 +2288,6 @@ struct b_list *findactivewindow(struct b_list *lws)
       }
    if (is:null(d)) return NULL;
    return BlkD(d, List);
-}
+}   
 #endif					/* Graphics */
 #endif					/* PosixFns */
