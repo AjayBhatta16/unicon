@@ -27,7 +27,7 @@ struct descrip {		/* descriptor */
 #endif				/*   DescriptorDouble */
       char *sptr;		/*   pointer to character string */
       union block *bptr;	/*   pointer to a block */
-      dptr descptr;		/*   pointer to a descriptor */
+      dptr descptr;      /*   pointer to a descriptor */
       } vword;
    };
 
@@ -140,15 +140,17 @@ union f {
      struct ptstruct *pt;
 #endif					/* PseudoPty */
    int fd;        /*   other int-based file descriptor */
-   SSL* ssl;
+   SSL *ssl; 
    };
+/*struct for ssl using union*/
+
 
 struct b_file {			/* file block */
    word title;			/*   T_File */
    union f fd;
    word status;			/*   file status */
 #ifdef Concurrent
-   word mutexid;
+  word mutexid;
 #endif				/* Concurrent */
    struct descrip fname;	/*   file name (string qualifier) */
    };

@@ -441,11 +441,11 @@ struct errtab errtab[] = {
 #endif					/* HAVE_LIBSSL */
 
 #endif                                  /* Messaging */
-
+   
 /*
  * End of operating-system specific code.
  */
-
+   1216, "Unable to create SSL context",
    0,	""
    };
 

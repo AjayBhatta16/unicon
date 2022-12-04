@@ -40,7 +40,9 @@
 #define Fs_Create	 04	/* file created on open */
 #define Fs_Append	010	/* append mode */
 #define Fs_Pipe		020	/* reading or writing on a pipe */
-				/* see also: BPipe down below */ 
+				/* see also: BPipe down below */
+
+
 
 #define Fs_Reading     0100     /* last file operation was read */
 #define Fs_Writing     0200     /* last file operation was write */
@@ -62,6 +64,7 @@
    #define Fs_Unbuf     040000
    #define Fs_Listen   0100000
    #define Fs_BPipe    0200000		/* bidirectional pipe */
+  
 #endif					/* PosixFns */
 
 #ifdef ISQL
@@ -94,7 +97,8 @@
 #ifdef GraphicsGL 
    #define Fs_WinGL2D	0100000000	/* for OpenGL 2D window */
 #endif					/* GraphicsGL */
-#define Fs_Encrypt      0200000000
+#define Fs_Encrypt      0200000000      /*  this bit is now available */
+
 /*
  * Thread status flags in status field of coexpr blocks.
  * Ts_Native can only be Ts_Sync.  Ts_Posix may be Sync or Async.

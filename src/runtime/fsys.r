@@ -399,8 +399,7 @@ Deliberate Syntax Error
 	 switch (*s++) {
 	    case 'j':
 	    case 'J':
-		status |= Fs_Encrypt;
-		printf("Fs_Encrypt %o", Fs_Encrypt);
+		status |= Fs_Encrypt;	
 		continue;
 	    case 'a':
 	    case 'A':
@@ -643,7 +642,7 @@ Deliberate Syntax Error
     	if ( ctx == NULL )
     	{
         ERR_print_errors_fp(stderr);
-        abort();
+        runerr(1216);
     	}
 	SSL_CTX_set_cipher_list(ctx, "ALL:eNULL");
 
@@ -661,7 +660,7 @@ Deliberate Syntax Error
         {
         printf("Error 3\n");
 
-        abort();
+        runerr(1216);
     }
     /* set the private key from KeyFile (may be the same as CertFile) */
         SSL_CTX_set_default_passwd_cb_userdata(ctx, "12345678");
@@ -669,14 +668,14 @@ Deliberate Syntax Error
     {
        printf("Error 4\n");
 
-        abort();
+        runerr(1216);
     }
     /* verify private key */
     if (!SSL_CTX_check_private_key(ctx))
     {
        printf("Error 5\n");
 
-        abort();
+        runerr(1216);
     }
  
 	}
