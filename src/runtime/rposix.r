@@ -271,9 +271,9 @@ int get_fd(struct descrip file, unsigned int errmask)
 #endif					/* NT */
 
       if (status & Fs_Socket) {
-	 printf("this is a socket %o\n", status);
+	 /* printf("this is a socket %o\n", status); */
 	 if(status & Fs_Encrypt){
-	    printf("socket Fs_Encrypt hit %o\n", status);
+	    /* printf("socket Fs_Encrypt hit %o\n", status); */
 	    return SSL_get_fd(BlkD(file,File)->fd.ssl);
 	 }
 	 else
@@ -1548,18 +1548,18 @@ int sock_write(int f, char *msg, int n)
    unsigned int len;
    SOCKET fd = ((SOCKET)f); /* used to wrap f inside an fdup, but no more */
    len = sizeof(s_type);
-   printf("Sock_write \n");
+   /*printf("Sock_write \n");*/
    if (getsockopt(fd, SOL_SOCKET, SO_TYPE, (char *)&s_type, &len) < 0)
       return 0;
 
    if (s_type == SOCK_DGRAM){
-      printf("????????msg: %s", msg);
+      /*printf("????????msg: %s", msg);*/
       rv = sendto(fd, msg, n, 0,
 		  saddrs[fd]->ai_addr, saddrs[fd]->ai_addrlen);
 	
    }
    else
-      printf("????????msg2: %s", msg);
+      /*printf("????????msg2: %s", msg);*/
       rv = send(fd, msg, n, 0);
       
    return rv;

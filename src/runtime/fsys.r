@@ -614,9 +614,9 @@ Deliberate Syntax Error
 
 
         if(cnv:C_string(attr[0], CertFile)!= 1)
-		printf("CertFile Failed!\n");
+		runerr(1216);
         if(cnv:C_string(attr[1], KeyFile)!= 1)
-		printf("KeyFile Failed!\n");
+		runerr(1216);
 		
 
 	{
@@ -648,33 +648,27 @@ Deliberate Syntax Error
 
  	//New lines 
         if (SSL_CTX_load_verify_locations(ctx, CertFile, KeyFile) != 1)
-        printf("Error 1\n");
+           runerr(1216);
 
         if (SSL_CTX_set_default_verify_paths(ctx) != 1)
-        printf("Error 2\n");
+           runerr(1216);
 
         //End new lines
 
         /* set the local certificate from CertFile */
         if (SSL_CTX_use_certificate_file(ctx, CertFile, SSL_FILETYPE_PEM) <= 0)
         {
-        printf("Error 3\n");
-
-        runerr(1216);
-    }
+           runerr(1216);
+        }
     /* set the private key from KeyFile (may be the same as CertFile) */
         SSL_CTX_set_default_passwd_cb_userdata(ctx, "12345678");
     if (SSL_CTX_use_PrivateKey_file(ctx, KeyFile, SSL_FILETYPE_PEM) <= 0)
     {
-       printf("Error 4\n");
-
         runerr(1216);
     }
     /* verify private key */
     if (!SSL_CTX_check_private_key(ctx))
     {
-       printf("Error 5\n");
-
         runerr(1216);
     }
  
@@ -1055,19 +1049,15 @@ Deliberate Syntax Error
       	       DEC_NARTHREADS;
 
 		fd = sock_listen(fnamestr, is_udp_or_listener, af_fam);
-		printf("Sock listen before if statement \n");
+		/* printf("Sock listen before if statement \n"); */
 		if(status & Fs_Encrypt)
                
 		{
-			printf("after if statement sock listen\n");
+			/* printf("after if statement sock listen\n"); */
 			ssl = SSL_new(ctx);
      		           SSL_set_fd(ssl, fd);
 
-        	        if (SSL_accept(ssl) == -1)
-               			printf("SSL FAILED!\n");
-			else
-				printf("SSL Succeeded\n");
-		
+        	        SSL_accept(ssl);	
 
 
                
@@ -1124,14 +1114,14 @@ Deliberate Syntax Error
 	    StrLen(filename) = strlen(fnamestr)+1;
 	    StrLoc(filename) = fnamestr;
 	    Protect(fl = alcfile(0, status, &filename), runerr(0));
-	   	printf("Address of stucture in fsys: %p\n", fl);
+	   	/* printf("Address of stucture in fsys: %p\n", fl); */
 		
 		fl->fd.ssl = ssl;
-	 	printf("Address of ssl in fsys: %p\n", ssl);		
+	 	/* printf("Address of ssl in fsys: %p\n", ssl); */		
 		 
 	    //	fl->fd.fd = fd;
 		
-	    printf("this is status in fsys %o\n", status);
+	    /* printf("this is status in fsys %o\n", status); */
 	    return file(fl);
 	    }
 	 else if (stat(fnamestr, &st) < 0) {
@@ -2762,7 +2752,7 @@ end
 #endif                                  /* Messaging */
 #ifdef PosixFns
       if (status & Fs_Socket){ 
-	 printf("Sock write \n");
+	 /* printf("Sock write \n"); */
 	 if (sock_write(f.fd, "\n", 1) < 0){
 	    MUTEX_UNLOCKID(fblk->mutexid);
 #if terminate

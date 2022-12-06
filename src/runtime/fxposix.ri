@@ -3093,7 +3093,7 @@ function{0, 1} ready(f, i)
       status = BlkD(f,File)->status;
       
       
-      printf("we are ready to read from the socket\n");
+      /* printf("we are ready to read from the socket\n"); */
       if (!(status & Fs_Read))
 	  runerr(212, f);
 
@@ -3169,13 +3169,12 @@ function{0, 1} ready(f, i)
         ssl = BlkD(f,File)->fd.ssl;
 	
         
-	tb = SSL_read(ssl, buf, sizeof(buf));
-	printf("Test\n");	
+	tb = SSL_read(ssl, buf, sizeof(buf));	
 	if (tb == 0)
 	fail;
 
 	StrLoc(desc) = buf;
-	printf("BUF: %s", buf);
+	/* printf("BUF: %s", buf); */
 	StrLen(desc) = tb;
 	}
       else{
