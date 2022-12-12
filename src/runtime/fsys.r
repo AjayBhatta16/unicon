@@ -60,13 +60,10 @@ function{0,1} close(f)
 
 #ifdef PosixFns
       if (BlkD(f,File)->status & Fs_Socket) {
-	 if(status & Fs_Encrypt)
-            {
-
-               SSL_CTX_free(SSL_get_SSL_CTX(BlkLoc(f)->File.fd.ssl));
-	       SSL_free(BlkLoc(f)->File.fd.ssl);
-	       
-                        }
+	 if(status & Fs_Encrypt) {
+            SSL_CTX_free(SSL_get_SSL_CTX(BlkLoc(f)->File.fd.ssl));
+	    SSL_free(BlkLoc(f)->File.fd.ssl);   
+            }
 
 	 BlkLoc(f)->File.status = 0;
 	 StrLoc(BlkLoc(f)->File.fname) = "closed socket";

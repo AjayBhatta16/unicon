@@ -3159,23 +3159,18 @@ function{0, 1} ready(f, i)
 
 /* if status & Fs_Encrypt */
 	if (status & Fs_Encrypt){
-
-
-
-
-	char buf[2048];
-	int tb;
-	SSL *ssl;
-        ssl = BlkD(f,File)->fd.ssl;
-	
+	   char buf[2048];
+	   int tb;
+	   SSL *ssl;
+           ssl = BlkD(f,File)->fd.ssl;
         
-	tb = SSL_read(ssl, buf, sizeof(buf));	
-	if (tb == 0)
-	fail;
+	   tb = SSL_read(ssl, buf, sizeof(buf));	
+	   if (tb == 0)
+	      fail;
 
-	StrLoc(desc) = buf;
-	/* printf("BUF: %s", buf); */
-	StrLen(desc) = tb;
+	   StrLoc(desc) = buf;
+	   /* printf("BUF: %s", buf); */
+	   StrLen(desc) = tb;
 	}
       else{
       if (u_read(fd, i, status, &desc) == 0)
