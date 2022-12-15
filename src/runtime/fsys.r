@@ -1046,6 +1046,7 @@ Deliberate Syntax Error
       	       DEC_NARTHREADS;
 
 		fd = sock_listen(fnamestr, is_udp_or_listener, af_fam);
+		/* printf("Value of fd: %d \n", fd); */
 		/* printf("Sock listen before if statement \n"); */
 		if(status & Fs_Encrypt)
                
